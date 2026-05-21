@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { Sidebar } from "@/components/layout/sidebar"
 import { Toaster } from "@/components/ui/sonner"
+import { ServerWakeup } from "@/components/server-wakeup"
 
 export const metadata: Metadata = {
   title: "DocuMind AI",
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Sidebar />
           <main className="flex-1 overflow-auto">{children}</main>
         </div>
+        <ServerWakeup />
         <Toaster />
       </body>
     </html>
