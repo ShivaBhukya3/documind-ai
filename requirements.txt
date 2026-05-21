@@ -1,5 +1,5 @@
 # ──────────────────────────────────────────────────────────────────
-# DocuMind AI — Python Dependencies (Python 3.10+, tested on 3.14)
+# DocuMind AI — Python Dependencies (Python 3.11)
 # ──────────────────────────────────────────────────────────────────
 
 # Core LLM & RAG
@@ -7,8 +7,9 @@ langchain==0.2.16
 langchain-openai==0.1.25
 langchain-community==0.2.16
 langchain-core==0.2.41
+langchain-groq>=0.1.9
 openai>=1.55.3
-faiss-cpu>=1.12.0
+faiss-cpu>=1.7.4
 tiktoken>=0.7.0
 
 # Embeddings
@@ -32,9 +33,12 @@ uvicorn[standard]>=0.30.0
 python-multipart>=0.0.9
 pydantic>=2.7.0
 
-# Data  (use whatever is installed — 2.x or 3.x both work)
+# AWS S3
+boto3>=1.26.0
+
+# Data
 pandas>=2.2.0
-numpy>=2.0.0
+numpy>=1.26.0
 
 # Evaluation
 rouge-score>=0.1.2
@@ -45,10 +49,5 @@ pyyaml>=6.0.1
 python-dotenv>=1.0.1
 tqdm>=4.66.4
 loguru>=0.7.2
+psutil>=5.9.0
 pytest>=8.2.0
-
-# Optional: BM25 hybrid search
-# rank-bm25>=0.2.2
-
-# Optional: PCA visualisation in notebooks
-# scikit-learn>=1.5.0
