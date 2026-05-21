@@ -61,19 +61,31 @@ export async function resetChat(sessionId: string) {
   })
 }
 
-export async function uploadDocument(file: File) {
+export async function uploadDocument(file: File, timeoutMs = 120_000) {
   const fd = new FormData()
   fd.append("file", file)
-  const r = await fetch(`${API}/api/v1/documents/upload`, {
-    method: "POST",
-    headers: KEY ? { "X-API-Key": KEY } : {},
-    body: fd,
-  })
-  if (!r.ok) {
-    const err = await r.json().catch(() => ({}))
-    throw new Error((err as { detail?: string }).detail ?? `HTTP ${r.status}`)
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const r = await fetch(`${API}/api/v1/documents/upload`, {
+      method: "POST",
+      headers: KEY ? { "X-API-Key": KEY } : {},
+      body: fd,
+      signal: controller.signal,
+    })
+    if (!r.ok) {
+      const err = await r.json().catch(() => ({}))
+      throw new Error((err as { detail?: string }).detail ?? `HTTP ${r.status}`)
+    }
+    return r.json()
+  } catch (e: unknown) {
+    if (e instanceof Error && e.name === "AbortError") {
+      throw new Error("Upload timed out — server may be starting up, please try again.")
+    }
+    throw e
+  } finally {
+    clearTimeout(timer)
   }
-  return r.json()
 }
 
 export interface DocumentRecord {
