@@ -1,0 +1,123 @@
+DocuMind AI — Product Documentation v1.0
+========================================
+
+Overview
+--------
+
+DocuMind AI is an enterprise-grade Retrieval-Augmented Generation (RAG) system that enables organisations to query their internal documents using natural language. The system combines state-of-the-art LLMs with vector search to deliver accurate, cited answers from your document corpus.
+
+Key capabilities: multi-document Q&A, real-time streaming responses, source citations with page numbers, conversation memory, and a REST API.
+
+
+1. System Requirements
+----------------------
+
+  • Python 3.10 or higher
+  • RAM: Minimum 8 GB (16 GB recommended for large document sets)
+  • Disk: 10 GB free space for models and vector indexes
+  • OS: Ubuntu 20.04+, macOS 12+, Windows 11
+  • GPU: Optional — NVIDIA GPU with CUDA 11.8+ improves embedding speed by 10x
+  • Internet: Required for OpenAI API (optional if using local models)
+
+2. Installation
+---------------
+
+Step 1 — Clone the repository:
+  git clone https://github.com/yourusername/documind-ai.git
+  cd documind-ai
+
+Step 2 — Create virtual environment:
+  python -m venv venv
+  source venv/bin/activate  # Linux/Mac
+  venv\Scripts\activate   # Windows
+
+Step 3 — Install dependencies:
+  pip install -r requirements.txt
+
+Step 4 — Configure environment:
+  cp .env.example .env
+  # Edit .env with your API keys
+
+Step 5 — Generate sample data:
+  python generate_sample_docs.py
+
+Step 6 — Run the dashboard:
+  streamlit run dashboard/app.py
+
+
+3. Configuration Guide
+----------------------
+
+All configuration is managed via config/config.yaml. Key settings:
+
+  • llm.provider: 'openai' for GPT models, 'huggingface' for free models
+  • llm.model_name: 'gpt-3.5-turbo' (default) or 'gpt-4' for higher quality
+  • llm.temperature: 0.0 for factual responses, 0.7 for creative responses
+  • embeddings.provider: 'openai' (ada-002) or 'huggingface' (MiniLM, free)
+  • vector_store.top_k: Number of document chunks to retrieve (default: 5)
+  • chunking.chunk_size: Text chunk size in characters (default: 1000)
+  • retrieval.search_type: 'mmr' for diverse results, 'similarity' for pure relevance
+  • FREE_MODE=true in .env enables fully local operation at no cost
+
+4. API Reference
+----------------
+
+The REST API is available at http://localhost:8000. Base path: /api/v1
+
+
+4.1 Chat Endpoints
+------------------
+
+POST /api/v1/chat
+Request body: {"question": "string", "session_id": "string", "stream": bool}
+Response: {"answer": "string", "sources": [], "confidence": float, "tokens_used": int, "response_time": float}
+
+POST /api/v1/chat/reset
+Request body: {"session_id": "string"}
+Clears conversation history for the given session.
+
+GET /api/v1/chat/history/{session_id}
+Returns the full conversation history with metadata.
+
+
+4.2 Document Endpoints
+----------------------
+
+POST /api/v1/documents/upload
+Multipart form-data. Accepts PDF, DOCX, TXT, CSV, PPTX.
+Response: {"doc_id": str, "chunks_created": int, "processing_time": float}
+
+GET /api/v1/documents/list
+Returns all indexed documents with metadata.
+
+DELETE /api/v1/documents/{doc_id}
+Removes a document and its vectors from the index.
+
+GET /api/v1/documents/stats
+Returns total vectors, index size, and per-document statistics.
+
+
+5. Troubleshooting
+------------------
+
+Common issues and their resolutions:
+
+  • Error 'No module named faiss': Run 'pip install faiss-cpu' (or faiss-gpu for GPU)
+  • OpenAI AuthenticationError: Verify OPENAI_API_KEY in your .env file
+  • Slow embedding speed: Set FREE_MODE=false to use OpenAI Ada-002 (much faster)
+  • Empty answers: Lower score_threshold in config.yaml (default 0.3 → try 0.1)
+  • Memory issues with large PDFs: Reduce chunk_size to 500 in config.yaml
+  • Port 8501 already in use: Kill existing Streamlit with 'pkill -f streamlit'
+  • FAISS index corrupt: Delete data/processed/embeddings/ and re-ingest documents
+  • Rate limit from OpenAI: Implement exponential backoff or switch to gpt-3.5-turbo
+
+6. FAQ
+------
+
+  • Q: Can I use DocuMind AI without an OpenAI API key? A: Yes, set FREE_MODE=true.
+  • Q: What is the maximum document size? A: 50 MB per file (configurable).
+  • Q: How many documents can I index? A: FAISS supports millions of vectors.
+  • Q: Is my data sent to OpenAI? A: Only if using OpenAI APIs; FREE_MODE keeps data local.
+  • Q: Can I use my own embedding model? A: Yes, set embeddings.provider to 'huggingface'.
+  • Q: How do I improve answer quality? A: Increase top_k, use gpt-4, reduce chunk_size.
+  • Q: Does it support multiple languages? A: Yes, but best results with English documents.

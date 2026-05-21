@@ -1,0 +1,86 @@
+TechCorp Solutions — System Architecture & Technical Specifications
+===================================================================
+
+1. Architecture Overview
+------------------------
+
+TechCorp's platform is built on a microservices architecture deployed on AWS. The system processes over 2 million API requests per day across 12 microservices, with 99.97% uptime SLA. The architecture follows domain-driven design principles with event-driven communication via Apache Kafka.
+
+Core architectural decisions:
+• Polyglot persistence: PostgreSQL (transactional), MongoDB (documents), Redis (cache), Elasticsearch (search)
+• API Gateway: Kong for rate limiting, auth, and routing
+• Service mesh: Istio for inter-service communication and observability
+• CI/CD: GitHub Actions → ArgoCD → Kubernetes (EKS)
+
+
+2. Database Schema
+------------------
+
+Primary PostgreSQL schema (techcorp_prod database):
+
+  • users: id, email, name, role, org_id, created_at, last_login, is_active
+  • organisations: id, name, plan, seats, created_at, billing_email, stripe_customer_id
+  • documents: id, org_id, filename, file_type, size_bytes, chunk_count, indexed_at, status
+  • conversations: id, session_id, user_id, created_at, message_count, last_message_at
+  • messages: id, conversation_id, role, content, tokens_used, response_time_ms, created_at
+  • api_keys: id, org_id, key_hash, name, permissions, created_at, expires_at, last_used_at
+  • usage_logs: id, org_id, endpoint, tokens, cost_usd, latency_ms, status_code, created_at
+
+3. API Endpoints
+----------------
+
+REST API v2 (base: api.techcorp.com/v2). Authentication: Bearer JWT token.
+
+  • POST /auth/login — Returns JWT access token (expires 24h)
+  • POST /auth/refresh — Refresh expired token using refresh token
+  • GET /documents — List documents with pagination (?page=1&limit=20)
+  • POST /documents/upload — Upload document (multipart/form-data, max 50MB)
+  • DELETE /documents/{id} — Delete document and remove from index
+  • POST /chat — Send question and receive streamed answer (SSE)
+  • GET /chat/history/{session_id} — Get conversation history
+  • GET /usage — Get token usage statistics for billing period
+  • GET /health — System health check (public endpoint, no auth required)
+
+4. Security Architecture
+------------------------
+
+TechCorp implements a defence-in-depth security model aligned with ISO 27001 and SOC 2 Type II standards.
+
+  • Authentication: OAuth 2.0 + PKCE for user auth, API keys for service-to-service
+  • Authorisation: Role-Based Access Control (RBAC) with 5 roles: Owner, Admin, Developer, Viewer, Billing
+  • Encryption: TLS 1.3 in transit; AES-256 at rest for all stored data
+  • Secrets Management: AWS Secrets Manager for all credentials and API keys
+  • Network: VPC with private subnets; EC2 instances not publicly accessible
+  • WAF: AWS WAF with OWASP Core Rule Set blocking common attacks
+  • Penetration Testing: Quarterly by certified external security firm
+  • VAPT: Automated daily scans via Snyk (dependencies) and SonarQube (code)
+  • Audit Logs: All API calls logged to immutable S3 with 7-year retention
+
+5. Deployment Guide
+-------------------
+
+Production deployment uses Kubernetes on AWS EKS (us-east-1 primary, ap-south-1 secondary for disaster recovery).
+
+Prerequisites: kubectl 1.28+, helm 3.12+, AWS CLI 2.x, access to techcorp-prod cluster.
+
+Deploy a service:
+  helm upgrade --install documind-api ./helm/documind-api \
+    --namespace production \
+    --set image.tag=$GIT_SHA \
+    --set replicaCount=3 \
+    --values helm/values.prod.yaml
+
+Rolling update strategy: maxSurge=1, maxUnavailable=0 (zero-downtime deploys).
+Canary deployments: 10% traffic → 50% → 100% with automated rollback on error rate >1%.
+
+
+6. Monitoring & Observability
+-----------------------------
+
+  • Metrics: Prometheus + Grafana dashboards (grafana.techcorp.internal)
+  • Logs: ELK Stack (Elasticsearch, Logstash, Kibana) — 30-day retention
+  • Tracing: Jaeger distributed tracing (sampled at 10% in production)
+  • Alerts: PagerDuty for P0/P1 incidents; Slack #alerts for P2/P3
+  • SLOs: 99.97% availability, p99 latency <500ms, error rate <0.1%
+  • On-call rotation: Engineering teams on 1-week rotation, 15-min response SLA
+  • Incident runbooks: Stored in Confluence at docs.techcorp.internal/runbooks

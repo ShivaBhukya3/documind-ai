@@ -1,0 +1,87 @@
+TechCorp Solutions — HR Handbook: New Employee Onboarding Guide
+===============================================================
+
+Welcome to TechCorp Solutions!
+------------------------------
+
+Congratulations and welcome to the TechCorp family! We are thrilled to have you as part of our fast-growing team of innovators, builders, and problem-solvers. This handbook is your go-to guide for everything you need to know during your first 90 days and beyond.
+
+TechCorp Solutions was founded on the belief that great software, built by great people, can transform how businesses operate. You are now part of that mission. We look forward to seeing the unique value you will bring to your team.
+
+
+1. Your First Week (Days 1–5)
+-----------------------------
+
+  • Day 1: IT setup (laptop, email, Slack, Jira, Confluence access)
+  • Day 1: Meet your buddy (peer mentor assigned to you for first 30 days)
+  • Day 2: Orientation session with HR — company history, values, and culture
+  • Day 2: Security awareness training (mandatory, 2 hours online)
+  • Day 3: Team introductions and project handover meetings
+  • Day 4: Product demo — understand what we build and sell
+  • Day 5: 1:1 with your manager — 30/60/90 day goals setting
+
+2. Compensation & Benefits
+--------------------------
+
+TechCorp offers a competitive total compensation package:
+
+  • Base Salary: Paid on the last working day of every month via NEFT
+  • Variable Pay: 10-20% of CTC based on performance (paid semi-annually)
+  • ESOP: Eligible after 1 year — 4-year vesting with 1-year cliff
+  • Health Insurance: ₹5 Lakh family floater (self + spouse + 2 children)
+  • Term Life Insurance: 3x annual CTC coverage
+  • Accident Insurance: ₹25 Lakh personal accident policy
+  • Gratuity: As per Payment of Gratuity Act (eligible after 5 years)
+  • PF: 12% employer contribution on basic salary
+  • Sodexo Meal Card: ₹2,500/month (tax-exempt)
+  • Internet Reimbursement: ₹1,000/month for WFH employees
+
+3. Career Growth Framework
+--------------------------
+
+TechCorp follows a structured IC (Individual Contributor) and Management track. Promotion decisions are based on a combination of performance rating, tenure, and role availability.
+
+  • IC Track: Junior Engineer → Engineer → Senior Engineer → Staff Engineer → Principal Engineer
+  • Management Track: Team Lead → Engineering Manager → Senior EM → Director → VP
+  • Average time to first promotion: 18-24 months for top performers
+  • Lateral moves are encouraged — cross-functional transfers allowed after 12 months
+  • Learning budget: ₹50,000/year per employee for courses, conferences, certifications
+  • Internal mobility portal: jobs.techcorp.internal (open positions posted every Friday)
+
+4. Team Structure
+-----------------
+
+TechCorp is organised into 6 business units, each led by a VP reporting to the CEO.
+
+  • Engineering: 120 engineers across Frontend, Backend, Platform, ML/AI, and QA
+  • Product: 25 PMs and Designers driving product roadmap
+  • Sales & BD: 40 account executives and business development managers
+  • Customer Success: 35 CSMs ensuring client retention and expansion
+  • Operations & Finance: 20 employees managing compliance, legal, and finance
+  • People & Culture (HR): 10 HRBPs and recruiters
+
+5. Tools & Access
+-----------------
+
+You will be provisioned access to the following tools within Day 1:
+
+  • Communication: Slack (primary), Email (Google Workspace), Zoom
+  • Project Management: Jira (Engineering), Asana (Non-Engineering)
+  • Documentation: Confluence (internal wiki), Google Drive
+  • Code: GitHub Enterprise (Engineering), Bitbucket (legacy projects)
+  • Design: Figma (Product & Design team)
+  • Data & Analytics: Looker, BigQuery (Data Science team)
+  • HR & Payroll: Darwinbox (leave, payslips, appraisals)
+  • IT Help: ServiceNow — raise tickets at it.techcorp.internal
+
+6. Frequently Asked Questions (New Joiners)
+-------------------------------------------
+
+  • When do I get my first salary? Salary is processed by the last working day of the month.
+  • How do I apply for leave? Use the Darwinbox HR portal.
+  • Who is my HR point of contact? Your assigned HRBP is listed in your offer letter.
+  • Can I work from home? Yes, as per the WFH policy (see Employee Policy Manual).
+  • How long is the probation period? 6 months for all new hires.
+  • When can I apply for ESOP? After completing 12 months of service.
+  • How do I raise an IT issue? Use ServiceNow at it.techcorp.internal.
+  • Is there a dress code? Smart-casual. Formals only for client-facing meetings.

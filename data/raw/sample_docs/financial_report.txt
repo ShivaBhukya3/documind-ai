@@ -1,0 +1,70 @@
+TechCorp Solutions — Annual Financial Report FY 2024
+====================================================
+
+Executive Summary
+-----------------
+
+FY 2024 was a landmark year for TechCorp Solutions. The company reported its highest-ever revenue of ₹45 Crore, representing a 32% year-over-year growth from ₹34.1 Crore in FY 2023. EBITDA margin improved to 28% (₹12.6 Crore) from 22% in the prior year, driven by operational efficiency initiatives and a favourable product mix shift toward high-margin SaaS offerings.
+
+Net profit after tax stood at ₹8.5 Crore, up 41% YoY. The company ended FY 2024 with ₹14 Crore in cash and equivalents, providing a strong runway for planned expansion into the US and Southeast Asian markets in FY 2025.
+
+
+Revenue Breakdown
+-----------------
+
+Total Revenue: ₹45 Crore | Growth: +32% YoY
+
+  • SaaS Products: ₹22.5 Crore (50% of revenue, +45% YoY)
+  • Professional Services: ₹13.5 Crore (30% of revenue, +18% YoY)
+  • Licensing & Support: ₹6.75 Crore (15% of revenue, +20% YoY)
+  • Training & Certification: ₹2.25 Crore (5% of revenue, +67% YoY)
+
+Revenue by Geography
+--------------------
+
+  • India: ₹27 Crore (60%) — Enterprise and SMB segments
+  • USA: ₹9 Crore (20%) — Enterprise focus, 8 Fortune 500 clients
+  • Singapore & APAC: ₹6.75 Crore (15%) — New market entry
+  • Middle East & Others: ₹2.25 Crore (5%)
+
+Expense Summary
+---------------
+
+Total Operating Expenses: ₹32.4 Crore
+
+  • Personnel Costs: ₹18.9 Crore (58.3% of expenses) — headcount grew from 180 to 250
+  • Cloud Infrastructure (AWS/GCP): ₹4.86 Crore (15%) — optimised via Reserved Instances
+  • Sales & Marketing: ₹4.53 Crore (14%) — 3 new markets entered
+  • R&D Investment: ₹2.27 Crore (7%) — AI/ML product features
+  • General & Administrative: ₹1.78 Crore (5.5%)
+
+Quarterly Performance
+---------------------
+
+  • Q1 FY24 (Apr–Jun 2023): Revenue ₹9.5 Crore | Net Profit ₹1.6 Crore
+  • Q2 FY24 (Jul–Sep 2023): Revenue ₹10.8 Crore | Net Profit ₹1.9 Crore
+  • Q3 FY24 (Oct–Dec 2023): Revenue ₹11.7 Crore | Net Profit ₹2.1 Crore
+  • Q4 FY24 (Jan–Mar 2024): Revenue ₹13 Crore | Net Profit ₹2.9 Crore (best ever quarter)
+
+Key Financial Metrics
+---------------------
+
+  • Gross Margin: 68% (up from 61% in FY23)
+  • EBITDA: ₹12.6 Crore | EBITDA Margin: 28%
+  • Net Profit: ₹8.5 Crore | Net Margin: 18.9%
+  • Customer Acquisition Cost (CAC): ₹1.8 Lakh (down 15% from FY23)
+  • Customer Lifetime Value (LTV): ₹22 Lakh | LTV:CAC Ratio: 12.2x
+  • Annual Recurring Revenue (ARR): ₹24 Crore | Monthly Churn: 1.2%
+  • Net Revenue Retention (NRR): 118%
+  • Cash & Equivalents: ₹14 Crore | Debt: Nil
+
+Future Projections FY 2025
+--------------------------
+
+Based on current pipeline and market conditions, TechCorp projects FY 2025 revenue of ₹62–65 Crore (38-44% growth), driven by:
+
+1. US market expansion with 2 new enterprise clients already signed in Q1 FY25
+2. Launch of DocuMind AI Enterprise Edition (₹12 Lakh/year per enterprise)
+3. Strategic partnership with Infosys BPM for document processing at scale
+4. Headcount expansion to 350 employees by Q3 FY25
+

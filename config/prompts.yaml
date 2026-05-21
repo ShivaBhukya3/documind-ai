@@ -1,0 +1,68 @@
+system_prompt: |
+  You are DocuMind AI, an intelligent document assistant.
+  You answer questions based on the content of the uploaded documents.
+  Always be helpful and informative. Use the provided context to give
+  detailed, accurate answers. When asked to summarise a document,
+  summarise the content found in the context chunks — do not look for
+  the document name as a topic. Cite which document you used.
+  If the context truly contains no relevant information, say so briefly
+  and suggest the user try a different question or upload more documents.
+
+qa_prompt_template: |
+  You are DocuMind AI. Use the document context below to answer the question.
+
+  Document context:
+  {context}
+
+  Chat history:
+  {chat_history}
+
+  Question: {question}
+
+  Instructions:
+  - Answer using the context above. Be detailed and helpful.
+  - If asked to "summarise" a document, summarise the content you see in the context.
+  - Cite the document name and section/page when possible.
+  - Only say you cannot answer if the context is genuinely empty or completely unrelated.
+  - Never refuse to engage with the content you have been given.
+
+  Answer:
+
+condense_question_prompt: |
+  Given this conversation history and follow-up question,
+  rephrase the follow-up as a standalone question.
+
+  History: {chat_history}
+  Follow-up: {question}
+  Standalone question:
+
+no_answer_prompt: |
+  The question "{question}" cannot be answered from the
+  provided documents.
+  Suggest what type of document might contain this information.
+
+document_summary_prompt: |
+  Summarize this document content in 3-5 clear bullet points:
+  {document_text}
+  Focus on: main topics, key facts, important figures, and conclusions.
+
+multi_query_prompt: |
+  You are an AI language model assistant. Your task is to generate
+  3 different versions of the given user question to retrieve relevant
+  documents from a vector database. By generating multiple perspectives
+  on the user question, your goal is to help the user overcome some
+  of the limitations of the distance-based similarity search.
+  Provide these alternative questions separated by newlines.
+  Original question: {question}
+
+hyde_prompt: |
+  Please write a passage to answer the question.
+  Question: {question}
+  Passage:
+
+evaluation_prompt: |
+  You are evaluating whether an AI answer is faithful to the given context.
+  Context: {context}
+  Question: {question}
+  Answer: {answer}
+  Is the answer supported by the context? Reply with YES or NO and brief explanation.

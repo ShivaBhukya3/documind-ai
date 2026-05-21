@@ -1,0 +1,106 @@
+TechCorp Solutions — Employee Policy Manual v3.2
+================================================
+
+1. Introduction
+---------------
+
+Welcome to TechCorp Solutions. This Employee Policy Manual outlines the standards, expectations, and guidelines that govern our workplace. Every team member is expected to read, understand, and adhere to these policies. This document supersedes all previous versions of the policy manual.
+
+TechCorp Solutions was founded in 2010 and has grown to employ over 2,500 professionals across 12 offices in India, USA, and Singapore. Our mission is to deliver world-class software products while maintaining a respectful, inclusive, and high-performance workplace.
+
+
+2. Leave Policy
+---------------
+
+TechCorp Solutions offers a comprehensive leave policy designed to support employee well-being and work-life balance.
+
+  • Annual Leave: 18 days per calendar year (pro-rated for new joiners)
+  • Sick Leave: 12 days per year (requires medical certificate beyond 3 consecutive days)
+  • Casual Leave: 6 days per year (max 3 consecutive days)
+  • Maternity Leave: 26 weeks as per the Maternity Benefit Act 2017
+  • Paternity Leave: 10 days within 6 months of childbirth
+  • Bereavement Leave: 5 days for immediate family members
+  • Public Holidays: 10 national + 3 optional holidays per year
+  • Carry-forward: Up to 10 unused annual leave days may be carried to next year
+
+2.1 Leave Application Process
+-----------------------------
+
+All leave requests must be submitted through the HR portal (hr.techcorp.internal) at least 48 hours in advance for planned leave. Emergency leave must be notified to the direct manager via phone or email within 2 hours of the start of the workday. Leave requests are subject to manager approval based on business requirements. Employees on extended sick leave (>5 days) must submit a fitness-to-return certificate.
+
+
+3. Work From Home (WFH) Policy
+------------------------------
+
+TechCorp Solutions operates a hybrid work model effective January 2024. Employees are expected to be present in office a minimum of 3 days per week (Tuesday, Wednesday, Thursday are mandatory office days for most teams).
+
+WFH eligibility is based on role classification:
+
+  • Category A (Full Hybrid): Software Engineers, Data Scientists, Product Managers — up to 2 WFH days/week
+  • Category B (Mostly Office): Sales, Support, Operations — up to 1 WFH day/week
+  • Category C (Full Remote): Pre-approved remote employees — 5 days WFH
+  • All WFH employees must maintain a dedicated workspace with reliable internet (min 25 Mbps)
+  • Core hours for availability: 10:00 AM – 5:00 PM IST regardless of location
+  • VPN must be used for all company system access from home
+
+4. Code of Conduct
+------------------
+
+TechCorp Solutions is committed to maintaining a workplace free from discrimination, harassment, and intimidation. All employees must treat colleagues, clients, and vendors with dignity and respect.
+
+  • Zero tolerance for sexual harassment (POSH Act compliance mandatory)
+  • Discrimination based on race, gender, religion, disability or age is strictly prohibited
+  • Workplace conflicts must be escalated to HR within 7 days of the incident
+  • Confidential information must never be shared outside the organisation
+  • Social media posts about the company require prior approval from the Communications team
+  • Employees must not engage in moonlighting without written approval from HR
+
+5. IT Usage Policy
+------------------
+
+Company-provided devices and network infrastructure are for professional use only. Personal use is permitted within reasonable limits but must not interfere with work responsibilities or consume excessive bandwidth.
+
+  • Passwords must be at least 12 characters with mixed case, numbers, and symbols
+  • Password rotation is mandatory every 90 days
+  • Employees must lock screens when away from their desk (Win+L or Cmd+Ctrl+Q)
+  • Installation of unauthorised software requires IT approval via the service desk
+  • Downloading pirated content or visiting gambling/adult sites is prohibited
+  • All company data must be stored in approved cloud platforms (Google Drive, Confluence)
+  • USB drives are prohibited unless encrypted and registered with IT Security
+  • Incidents must be reported to security@techcorp.com within 1 hour of detection
+
+6. Performance Review Process
+-----------------------------
+
+TechCorp follows a bi-annual performance review cycle (April and October). Performance is evaluated on a 5-point scale:
+
+5 — Exceptional | 4 — Exceeds Expectations | 3 — Meets Expectations | 2 — Needs Improvement | 1 — Unsatisfactory
+
+Reviews involve self-assessment, manager rating, and a calibration session with senior leadership. Employees rated 4+ are eligible for accelerated promotion tracks and spot bonuses. Employees rated below 2 for two consecutive cycles are placed on a Performance Improvement Plan (PIP).
+
+  • Goal-setting (OKRs) must be completed within the first 2 weeks of each half
+  • Mid-cycle check-ins are mandatory in month 3 of each half
+  • 360-degree feedback is collected from peers and cross-functional stakeholders
+  • Promotion decisions are finalised in May and November
+  • Annual increment ranges: 0% (rating 1-2), 5-8% (rating 3), 10-15% (rating 4), 18-25% (rating 5)
+
+7. Grievance Redressal
+----------------------
+
+Employees may raise grievances through the following channels:
+
+1. Direct Manager → 2. HR Business Partner → 3. HR Head → 4. CHRO → 5. CEO
+
+All grievances are acknowledged within 24 hours and resolved within 14 business days. Retaliation against an employee for raising a genuine grievance is a terminable offence. Anonymous feedback can be submitted at feedback.techcorp.internal.
+
+
+8. Disciplinary Action
+----------------------
+
+Violations of this policy may result in the following actions (in order of severity):
+
+  • Verbal warning (documented in HR system)
+  • Written warning (first offence for minor violations)
+  • Final written warning with 30-day review period
+  • Suspension without pay (up to 10 days)
+  • Termination of employment

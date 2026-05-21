@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.Python
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# Environment variables — NEVER commit real keys
+.env
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# Data files (large binaries)
+data/processed/embeddings/faiss_index/index.faiss
+data/processed/embeddings/faiss_index/index.pkl
+models/
+*.pkl
+*.bin
+
+# Logs
+logs/*.log
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+*.xml
+
+# Docker
+docker/volumes/
+
+# Next.js
+frontend/.next/
+frontend/node_modules/
+frontend/out/
+
+# Database
+data/*.db
+data/*.db-shm
+data/*.db-wal
+
+# Claude Code local settings
+.claude/
+
+# Uploaded / processed data (large binaries)
+data/processed/
+data/uploads/
+
+# Root-level logs
+*.log
+uvicorn.log
+streamlit.log

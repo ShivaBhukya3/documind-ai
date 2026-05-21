@@ -1,0 +1,54 @@
+# ──────────────────────────────────────────────────────────────────
+# DocuMind AI — Python Dependencies (Python 3.10+, tested on 3.14)
+# ──────────────────────────────────────────────────────────────────
+
+# Core LLM & RAG
+langchain==0.2.16
+langchain-openai==0.1.25
+langchain-community==0.2.16
+langchain-core==0.2.41
+openai>=1.55.3
+faiss-cpu>=1.12.0
+tiktoken>=0.7.0
+
+# Embeddings
+sentence-transformers>=2.7.0
+
+# Document Parsing
+pymupdf>=1.24.0
+python-docx>=1.1.2
+python-pptx>=0.6.23
+beautifulsoup4>=4.12.3
+requests>=2.32.0
+reportlab>=4.2.0
+
+# Dashboard
+streamlit>=1.35.0
+plotly>=5.22.0
+
+# API
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9
+pydantic>=2.7.0
+
+# Data  (use whatever is installed — 2.x or 3.x both work)
+pandas>=2.2.0
+numpy>=2.0.0
+
+# Evaluation
+rouge-score>=0.1.2
+nltk>=3.8.1
+
+# Utils
+pyyaml>=6.0.1
+python-dotenv>=1.0.1
+tqdm>=4.66.4
+loguru>=0.7.2
+pytest>=8.2.0
+
+# Optional: BM25 hybrid search
+# rank-bm25>=0.2.2
+
+# Optional: PCA visualisation in notebooks
+# scikit-learn>=1.5.0
