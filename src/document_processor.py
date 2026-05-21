@@ -172,7 +172,7 @@ class DocumentProcessor:
         current: list[str] = []
 
         for para in doc.paragraphs:
-            style = para.style.name.lower()
+            style = para.style.name.lower() if para.style else ""
             text = para.text.strip()
             if not text:
                 continue

@@ -38,8 +38,13 @@ class VectorStoreManager:
         self._created_at: Optional[str] = None
         self._last_updated: Optional[str] = None
 
+        # Restore from Supabase Storage if local index is missing
+        local_index = Path(self.index_path) / "index.faiss"
+        if not local_index.exists():
+            self._supabase_download()
+
         # Auto-load existing index if present
-        if Path(self.index_path).exists():
+        if (Path(self.index_path) / "index.faiss").exists():
             self._try_load_index()
 
     # ─────────────────────────────────────────────────────────────────────────
@@ -252,7 +257,7 @@ class VectorStoreManager:
     # ─────────────────────────────────────────────────────────────────────────
 
     def save_index(self) -> None:
-        """Persist FAISS index and metadata to disk."""
+        """Persist FAISS index to disk and back up to Supabase Storage."""
         if self.vector_store is None:
             return
         path = Path(self.index_path)
@@ -260,6 +265,7 @@ class VectorStoreManager:
         self.vector_store.save_local(str(path))
         self._save_meta(str(path))
         logger.info(f"FAISS index saved to {path}.")
+        self._supabase_upload()
 
     def get_index_stats(self) -> dict:
         """Return statistics about the current index."""
@@ -317,6 +323,60 @@ class VectorStoreManager:
                 meta = json.load(f)
             self._created_at = meta.get("created_at")
             self._last_updated = meta.get("last_updated")
+
+    def _supabase_upload(self) -> None:
+        """Upload FAISS index files to Supabase Storage (no-op if env vars not set)."""
+        s_url = os.getenv("SUPABASE_URL", "")
+        s_key = os.getenv("SUPABASE_SERVICE_KEY", "")
+        if not s_url or not s_key:
+            return
+        try:
+            import requests as _req
+            hdrs = {"Authorization": f"Bearer {s_key}", "apikey": s_key}
+            bucket = "faiss-index"
+            _req.post(f"{s_url}/storage/v1/bucket", json={"name": bucket, "public": False}, headers=hdrs)
+            path = Path(self.index_path)
+            for fname in ["index.faiss", "index.pkl", "meta.json"]:
+                fpath = path / fname
+                if not fpath.exists():
+                    continue
+                data = fpath.read_bytes()
+                resp = _req.post(
+                    f"{s_url}/storage/v1/object/{bucket}/{fname}",
+                    headers={**hdrs, "x-upsert": "true", "Content-Type": "application/octet-stream"},
+                    data=data,
+                )
+                if resp.status_code in (200, 201):
+                    logger.debug(f"Uploaded {fname} to Supabase Storage.")
+                else:
+                    logger.warning(f"Supabase upload {fname} failed: {resp.text[:200]}")
+        except Exception as exc:
+            logger.warning(f"Supabase upload skipped: {exc}")
+
+    def _supabase_download(self) -> None:
+        """Download FAISS index files from Supabase Storage (no-op if env vars not set)."""
+        s_url = os.getenv("SUPABASE_URL", "")
+        s_key = os.getenv("SUPABASE_SERVICE_KEY", "")
+        if not s_url or not s_key:
+            return
+        try:
+            import requests as _req
+            hdrs = {"Authorization": f"Bearer {s_key}", "apikey": s_key}
+            bucket = "faiss-index"
+            check = _req.get(f"{s_url}/storage/v1/object/{bucket}/index.faiss", headers=hdrs)
+            if check.status_code != 200:
+                logger.info("No FAISS backup found in Supabase Storage.")
+                return
+            path = Path(self.index_path)
+            path.mkdir(parents=True, exist_ok=True)
+            for fname in ["index.faiss", "index.pkl", "meta.json"]:
+                resp = _req.get(f"{s_url}/storage/v1/object/{bucket}/{fname}", headers=hdrs)
+                if resp.status_code == 200:
+                    (path / fname).write_bytes(resp.content)
+                    logger.debug(f"Downloaded {fname} from Supabase Storage.")
+            logger.info("FAISS index restored from Supabase Storage.")
+        except Exception as exc:
+            logger.warning(f"Supabase download skipped: {exc}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────

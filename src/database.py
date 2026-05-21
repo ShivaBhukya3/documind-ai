@@ -1,48 +1,59 @@
-"""SQLite database for persistent document metadata storage."""
+"""Document metadata storage — SQLite (local) or PostgreSQL (production via DATABASE_URL)."""
 
-import sqlite3
-import threading
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-DB_PATH = "data/documind.db"
+from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from loguru import logger
 
-_lock = threading.Lock()
-_conn: Optional[sqlite3.Connection] = None
+# ── Engine ────────────────────────────────────────────────────────────────────
+
+_raw_url = os.getenv("DATABASE_URL", "")
+if _raw_url:
+    if _raw_url.startswith("postgres://"):
+        _raw_url = _raw_url.replace("postgres://", "postgresql://", 1)
+    _DB_URL = _raw_url
+    _CONNECT_ARGS: dict = {}
+else:
+    _db_path = "data/documind.db"
+    Path(_db_path).parent.mkdir(parents=True, exist_ok=True)
+    _DB_URL = f"sqlite:///{_db_path}"
+    _CONNECT_ARGS = {"check_same_thread": False}
+
+engine = create_engine(_DB_URL, connect_args=_CONNECT_ARGS, pool_pre_ping=True)
+SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 
-def _get_conn() -> sqlite3.Connection:
-    global _conn
-    if _conn is None:
-        with _lock:
-            if _conn is None:
-                Path(DB_PATH).parent.mkdir(parents=True, exist_ok=True)
-                _conn = sqlite3.connect(DB_PATH, check_same_thread=False)
-                _conn.row_factory = sqlite3.Row
-                _conn.execute("PRAGMA journal_mode=WAL")
-    return _conn
+# ── Model ─────────────────────────────────────────────────────────────────────
 
+class Base(DeclarativeBase):
+    pass
+
+
+class DocumentRecord(Base):
+    __tablename__ = "documents"
+
+    id              = Column(Integer, primary_key=True, autoincrement=True)
+    filename        = Column(String, nullable=False, unique=True)
+    file_type       = Column(String, default="")
+    file_size_bytes = Column(Integer, default=0)
+    chunks          = Column(Integer, default=0)
+    vectors         = Column(Integer, default=0)
+    status          = Column(String, default="indexed")
+    error           = Column(String, default="")
+    s3_key          = Column(String, default="")
+    s3_url          = Column(String, default="")
+    uploaded_at     = Column(String, nullable=False, default="")
+
+
+# ── Public API ────────────────────────────────────────────────────────────────
 
 def init_db() -> None:
-    conn = _get_conn()
-    with _lock:
-        conn.execute("""
-            CREATE TABLE IF NOT EXISTS documents (
-                id              INTEGER PRIMARY KEY AUTOINCREMENT,
-                filename        TEXT    NOT NULL UNIQUE,
-                file_type       TEXT    NOT NULL DEFAULT '',
-                file_size_bytes INTEGER NOT NULL DEFAULT 0,
-                chunks          INTEGER NOT NULL DEFAULT 0,
-                vectors         INTEGER NOT NULL DEFAULT 0,
-                status          TEXT    NOT NULL DEFAULT 'indexed',
-                error           TEXT    NOT NULL DEFAULT '',
-                s3_key          TEXT    NOT NULL DEFAULT '',
-                s3_url          TEXT    NOT NULL DEFAULT '',
-                uploaded_at     TEXT    NOT NULL
-            )
-        """)
-        conn.commit()
+    Base.metadata.create_all(engine)
+    logger.info(f"Database ready ({_DB_URL[:30]}...).")
 
 
 def upsert_document(
@@ -56,60 +67,67 @@ def upsert_document(
     s3_key: str = "",
     s3_url: str = "",
 ) -> None:
-    conn = _get_conn()
     now = datetime.utcnow().isoformat(timespec="seconds")
-    with _lock:
-        conn.execute(
-            """
-            INSERT INTO documents
-                (filename, file_type, file_size_bytes, chunks, vectors,
-                 status, error, s3_key, s3_url, uploaded_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(filename) DO UPDATE SET
-                file_size_bytes = excluded.file_size_bytes,
-                chunks          = excluded.chunks,
-                vectors         = excluded.vectors,
-                status          = excluded.status,
-                error           = excluded.error,
-                s3_key          = excluded.s3_key,
-                s3_url          = excluded.s3_url,
-                uploaded_at     = excluded.uploaded_at
-            """,
-            (filename, file_type, file_size_bytes, chunks, vectors,
-             status, error, s3_key, s3_url, now),
-        )
-        conn.commit()
+    with SessionLocal() as session:
+        doc = session.query(DocumentRecord).filter_by(filename=filename).first()
+        if doc:
+            doc.file_type       = file_type
+            doc.file_size_bytes = file_size_bytes
+            doc.chunks          = chunks
+            doc.vectors         = vectors
+            doc.status          = status
+            doc.error           = error
+            doc.s3_key          = s3_key
+            doc.s3_url          = s3_url
+            doc.uploaded_at     = now
+        else:
+            session.add(DocumentRecord(
+                filename=filename, file_type=file_type,
+                file_size_bytes=file_size_bytes, chunks=chunks,
+                vectors=vectors, status=status, error=error,
+                s3_key=s3_key, s3_url=s3_url, uploaded_at=now,
+            ))
+        session.commit()
 
 
 def list_documents() -> list[dict]:
-    conn = _get_conn()
-    rows = conn.execute(
-        "SELECT * FROM documents ORDER BY uploaded_at DESC"
-    ).fetchall()
-    return [dict(r) for r in rows]
+    with SessionLocal() as session:
+        rows = session.query(DocumentRecord).order_by(DocumentRecord.uploaded_at.desc()).all()
+        return [_to_dict(r) for r in rows]
 
 
 def delete_document(filename: str) -> Optional[str]:
-    """Delete metadata and return the s3_key so the caller can remove S3 object."""
-    conn = _get_conn()
-    row = conn.execute(
-        "SELECT s3_key FROM documents WHERE filename = ?", (filename,)
-    ).fetchone()
-    s3_key = row["s3_key"] if row else None
-    with _lock:
-        conn.execute("DELETE FROM documents WHERE filename = ?", (filename,))
-        conn.commit()
-    return s3_key
+    with SessionLocal() as session:
+        doc = session.query(DocumentRecord).filter_by(filename=filename).first()
+        s3_key = doc.s3_key if doc else None
+        if doc:
+            session.delete(doc)
+            session.commit()
+        return s3_key
 
 
 def get_document(filename: str) -> Optional[dict]:
-    conn = _get_conn()
-    row = conn.execute(
-        "SELECT * FROM documents WHERE filename = ?", (filename,)
-    ).fetchone()
-    return dict(row) if row else None
+    with SessionLocal() as session:
+        doc = session.query(DocumentRecord).filter_by(filename=filename).first()
+        return _to_dict(doc) if doc else None
 
 
 def document_count() -> int:
-    conn = _get_conn()
-    return conn.execute("SELECT COUNT(*) FROM documents").fetchone()[0]
+    with SessionLocal() as session:
+        return session.query(DocumentRecord).count()
+
+
+def _to_dict(doc: DocumentRecord) -> dict:
+    return {
+        "id":              doc.id,
+        "filename":        doc.filename,
+        "file_type":       doc.file_type,
+        "file_size_bytes": doc.file_size_bytes,
+        "chunks":          doc.chunks,
+        "vectors":         doc.vectors,
+        "status":          doc.status,
+        "error":           doc.error,
+        "s3_key":          doc.s3_key,
+        "s3_url":          doc.s3_url,
+        "uploaded_at":     doc.uploaded_at,
+    }
