@@ -38,7 +38,7 @@ boto3>=1.26.0
 
 # Data
 pandas>=2.2.0
-numpy>=1.26.0
+numpy>=1.26.4,<2.0.0
 
 # Evaluation
 rouge-score>=0.1.2
