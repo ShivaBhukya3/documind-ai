@@ -50,11 +50,9 @@ class EmbeddingEngine:
 
         # Auto-fallback if no OpenAI key
         if self.provider == "openai" and not os.getenv("OPENAI_API_KEY"):
-            logger.warning(
-                "OPENAI_API_KEY not set — falling back to HuggingFace embeddings."
-            )
-            self.provider = "huggingface"
-            self.model_name = self.fallback_model
+            logger.warning("OPENAI_API_KEY not set — falling back to fastembed.")
+            self.provider = "fastembed"
+            self.model_name = "BAAI/bge-small-en-v1.5"
             self.dimension = 384
 
         logger.info(
@@ -66,19 +64,14 @@ class EmbeddingEngine:
     # ─────────────────────────────────────────────────────────────────────────
 
     def get_embeddings(self, provider: Optional[str] = None):
-        """Return a LangChain-compatible Embeddings object.
-
-        Args:
-            provider: Override provider ('openai' or 'huggingface').
-
-        Returns:
-            LangChain Embeddings instance.
-        """
+        """Return a LangChain-compatible Embeddings object."""
         provider = provider or self.provider
 
         if provider == "openai":
             return self._get_openai_embeddings()
-        return self._get_huggingface_embeddings()
+        if provider == "huggingface":
+            return self._get_huggingface_embeddings()
+        return self._get_fastembed_embeddings()
 
     def _get_openai_embeddings(self):
         try:
@@ -92,6 +85,11 @@ class EmbeddingEngine:
             openai_api_key=os.getenv("OPENAI_API_KEY"),
         )
 
+    def _get_fastembed_embeddings(self):
+        from langchain_community.embeddings import FastEmbedEmbeddings
+        logger.debug(f"Loading FastEmbed model: {self.model_name}")
+        return FastEmbedEmbeddings(model_name=self.model_name)
+
     def _get_huggingface_embeddings(self):
         try:
             from langchain_community.embeddings import HuggingFaceEmbeddings
@@ -101,7 +99,7 @@ class EmbeddingEngine:
         logger.debug(f"Loading HuggingFace embeddings model: {self.model_name}")
         return HuggingFaceEmbeddings(
             model_name=self.model_name,
-            model_kwargs={"device": _get_device()},
+            model_kwargs={"device": "cpu"},
             encode_kwargs={"normalize_embeddings": True},
         )
 

@@ -12,8 +12,8 @@ openai>=1.55.3
 faiss-cpu>=1.7.4
 tiktoken>=0.7.0
 
-# Embeddings
-sentence-transformers>=2.7.0
+# Embeddings — fastembed uses ONNX (no PyTorch, fits in 512 MB free tier)
+fastembed>=0.2.0
 
 # Document Parsing
 pymupdf>=1.24.0
