@@ -66,18 +66,10 @@ export function DocumentManager() {
     setUploading(valid.map((f) => f.name))
 
     for (const file of valid) {
-      const warmupToast = setTimeout(
-        () => toast.info("Server is waking up — this may take up to 60 s on first upload…", { duration: 55_000, id: "warmup" }),
-        6_000
-      )
       try {
         await uploadDocument(file)
-        clearTimeout(warmupToast)
-        toast.dismiss("warmup")
         toast.success(`Indexed ${file.name}`)
       } catch (e: unknown) {
-        clearTimeout(warmupToast)
-        toast.dismiss("warmup")
         toast.error(`Failed: ${e instanceof Error ? e.message : String(e)}`)
       }
     }
