@@ -11,7 +11,9 @@ from loguru import logger
 
 # ── Engine ────────────────────────────────────────────────────────────────────
 
-_raw_url = os.getenv("DATABASE_URL", "")
+_raw_url = os.getenv("DATABASE_URL", "").strip("\"'")
+# Strip Prisma-only params SQLAlchemy can't parse
+_raw_url = _raw_url.split("?pgbouncer=")[0].split("&pgbouncer=")[0]
 if _raw_url:
     if _raw_url.startswith("postgres://"):
         _raw_url = _raw_url.replace("postgres://", "postgresql://", 1)
