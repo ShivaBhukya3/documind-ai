@@ -11,21 +11,41 @@ from loguru import logger
 
 # ── Engine ────────────────────────────────────────────────────────────────────
 
-_raw_url = os.getenv("DATABASE_URL", "").strip("\"'")
-# Strip Prisma-only params SQLAlchemy can't parse
-_raw_url = _raw_url.split("?pgbouncer=")[0].split("&pgbouncer=")[0]
-if _raw_url:
-    if _raw_url.startswith("postgres://"):
-        _raw_url = _raw_url.replace("postgres://", "postgresql://", 1)
-    _DB_URL = _raw_url
-    _CONNECT_ARGS: dict = {}
-else:
-    _db_path = "data/documind.db"
-    Path(_db_path).parent.mkdir(parents=True, exist_ok=True)
-    _DB_URL = f"sqlite:///{_db_path}"
-    _CONNECT_ARGS = {"check_same_thread": False}
+def _make_engine():
+    from urllib.parse import urlparse
+    from sqlalchemy.engine import URL as SAURL
 
-engine = create_engine(_DB_URL, connect_args=_CONNECT_ARGS, pool_pre_ping=True)
+    raw = os.getenv("DATABASE_URL", "").strip("\"'")
+    # Remove Prisma-only query params SQLAlchemy can't handle
+    raw = raw.split("?pgbouncer=")[0].split("&pgbouncer=")[0]
+
+    if raw:
+        if raw.startswith("postgres://"):
+            raw = raw.replace("postgres://", "postgresql://", 1)
+        try:
+            p = urlparse(raw)
+            # Use URL.create so SQLAlchemy handles special chars in password
+            url = SAURL.create(
+                drivername="postgresql+psycopg2",
+                username=p.username,
+                password=p.password,
+                host=p.hostname,
+                port=p.port,
+                database=p.path.lstrip("/"),
+            )
+            return create_engine(url, pool_pre_ping=True, pool_size=2, max_overflow=3)
+        except Exception as exc:
+            logger.error(f"Failed to parse DATABASE_URL: {exc} — falling back to SQLite.")
+
+    db_path = "data/documind.db"
+    Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+    return create_engine(
+        f"sqlite:///{db_path}",
+        connect_args={"check_same_thread": False},
+        pool_pre_ping=True,
+    )
+
+engine = _make_engine()
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 
