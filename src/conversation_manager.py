@@ -41,7 +41,7 @@ class ConversationManager:
         Returns:
             LangChain ConversationBufferWindowMemory object.
         """
-        from langchain_classic.memory import ConversationBufferWindowMemory
+        from langchain.memory import ConversationBufferWindowMemory
 
         memory = ConversationBufferWindowMemory(
             k=self.window_size,

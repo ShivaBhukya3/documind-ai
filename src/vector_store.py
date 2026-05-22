@@ -326,8 +326,8 @@ class VectorStoreManager:
 
     def _supabase_upload(self) -> None:
         """Upload FAISS index files to Supabase Storage (no-op if env vars not set)."""
-        s_url = os.getenv("SUPABASE_URL", "")
-        s_key = os.getenv("SUPABASE_SERVICE_KEY", "")
+        s_url = os.getenv("SUPABASE_URL", "").strip()
+        s_key = os.getenv("SUPABASE_SERVICE_KEY", "").strip()
         if not s_url or not s_key:
             return
         try:
@@ -355,8 +355,8 @@ class VectorStoreManager:
 
     def _supabase_download(self) -> None:
         """Download FAISS index files from Supabase Storage (no-op if env vars not set)."""
-        s_url = os.getenv("SUPABASE_URL", "")
-        s_key = os.getenv("SUPABASE_SERVICE_KEY", "")
+        s_url = os.getenv("SUPABASE_URL", "").strip()
+        s_key = os.getenv("SUPABASE_SERVICE_KEY", "").strip()
         if not s_url or not s_key:
             return
         try:

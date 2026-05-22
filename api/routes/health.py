@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 router = APIRouter()
 
 
-@router.get("/health", tags=["System"])
+@router.api_route("/health", methods=["GET", "HEAD"], tags=["System"])
 async def health_check():
     """Basic health probe — always returns 200 if the API is running."""
     from api.main import get_pipeline

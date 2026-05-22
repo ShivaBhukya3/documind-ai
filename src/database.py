@@ -15,7 +15,7 @@ def _make_engine():
     from urllib.parse import urlparse
     from sqlalchemy.engine import URL as SAURL
 
-    raw = os.getenv("DATABASE_URL", "").strip("\"'")
+    raw = os.getenv("DATABASE_URL", "").strip().strip("\"'").strip()
     # Remove Prisma-only query params SQLAlchemy can't handle
     raw = raw.split("?pgbouncer=")[0].split("&pgbouncer=")[0]
 
